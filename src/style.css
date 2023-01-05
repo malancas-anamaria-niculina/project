@@ -1,9 +1,0 @@
-input {
-    background-color: beige;
-    color: black;
-}
-
-input::file-selector-button {
-    color: dodgerblue;
-
-}
