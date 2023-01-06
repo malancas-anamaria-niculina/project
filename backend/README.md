@@ -1,7 +1,6 @@
-dependencies:
-npm i body-parser
-npm i dotenv
-npm i cors
-npm i @aws-sdk/s3-request-presigner
-npm i @aws-sdk/client-s3
-npm install -g nodemon
+# Start the application using Docker
+Run commands from: ~PROJECT_PATH~/backend
+
+`docker build -t node-app .`
+
+`docker run -it -p 8080:8080 node-app`

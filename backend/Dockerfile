@@ -13,8 +13,14 @@ COPY . .
 # Install dependencies using npm
 RUN npm install
 
+# Install nodemon for automatically restart the Node.js App
+RUN npm install nodemon --global
+
+# Install babel globally
+RUN npm install -g babel-cli
+
 # Expose the port on which the app will be running
-EXPOSE 3000
+EXPOSE 8080
 
 # Start the app
-CMD ["npx", "serve", "build"]
+CMD ["npm", "run", "dev"]
