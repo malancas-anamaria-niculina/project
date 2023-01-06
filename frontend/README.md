@@ -1,3 +1,8 @@
+# Start the application using Docker
+Run commands from: <PATH>/frontend
+`docker build -t react-app .`
+`docker run -it -p 3000:3000 react-app`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
