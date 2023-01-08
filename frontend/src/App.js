@@ -11,7 +11,7 @@ function App() {
         </h1>
       </header>
       <Routes>
-        <Route path="/" element={<UploadFile />} />
+        <Route path="/dashboard" element={<UploadFile />} />
       </Routes>
     </div>
   );

@@ -1,10 +1,12 @@
 import axios from "axios";
+import { Button } from "@mui/material";
 
 function UploadFile() {
   const showFile = async (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    const fileContent = reader.readAsText(file);
+    console.log(file);
+    console.log(await file.text());
+    console.log(file.size);
     const axiosConf = {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -33,8 +35,11 @@ function UploadFile() {
   };
   return (
     <div>
-      <p>Some text to display</p>
-      <input type="file" id="uploadedFile" onChange={showFile} />
+      <p>Upload files</p>
+      <Button type="submit" variant="contained" component="label">
+        Upload
+        <input hidden accept="file/*" multiple type="file" onChange={showFile} />
+      </Button>
     </div>
   );
 }
