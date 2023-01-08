@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-html
+  name: node-app
+# Set the number of pods to run and access the Docker image and contained
 spec:
   selector:
     matchLabels:
-      app: app-html
+      app: node-app
   replicas: 1
   template:
     metadata:
       labels:
-        app: app-html
+        app: node-app
     spec:
       containers:
         - name: app
-          image: docker1509/frontendapp-html:main
+          image: docker1509/backendapp-node:latest
           ports:
             - containerPort: 80
