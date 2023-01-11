@@ -13,6 +13,7 @@ function UploadFile() {
       },
     };
     const url = "http://localhost:8080/api/s3/putUrl";
+    const fileContent = await file.text();
     const response = await Promise.resolve(
       axios
         .post(

@@ -15,7 +15,7 @@ newgrp docker
 # Install Conntrack -> GUEST_MISSING_CONNTRACK (https://github.com/manusa/actions-setup-minikube/issues/33)
 sudo apt-get install -y conntrack
 # Start Docker daemon (https://docs.docker.com/config/daemon/start/)
-sudo systemctl start docker
+sudo systemctl start docker #(alternative: sudo service docker start)
 # Install kubectl binary with curl on Linux
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 # Validate the binary
