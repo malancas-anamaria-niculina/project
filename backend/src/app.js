@@ -1,7 +1,9 @@
 import rout from "./api/index.js";
 import express, { urlencoded } from "express";
 import cors from "cors";
-import Client from 'pg/lib/client.js'
+import pg from "pg";
+
+const { Pool } = pg;
 
 export const app = express();
 
@@ -11,38 +13,22 @@ app.use(express.json({ limit: "50mb" }));
 app.use(urlencoded({ limit: "50mb", extended: true }));
 
 // Client for connecting to a postgresql database
-export const client = new Client({
+export const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-});
-/*export const getClient = async () => {
-  const client = new Client({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-  });
-  await client.connect((err) => {
-    if (err){
-      throw err;
-    }
-    console.log("Connection succesfully done");
-  });
-  return client;
-}*/
-
-await client.connect((err) => {
-  if (err){
-    throw err;
-  }
-  console.log("Connection succesfully done");
+  max: 10, // max number of clients in the pool
+  idleTimeoutMillis: 30000,
 });
 
-const createQuerry = `
+pool.on("connect", () => {
+  console.log("connected to the Database");
+});
+
+pool.connect((err, client, done) => {
+  const createQuerry = `
 CREATE TABLE IF NOT EXISTS files (
     file_name varchar,
     size float,
@@ -50,11 +36,19 @@ CREATE TABLE IF NOT EXISTS files (
     uploaded_time timestamp
 );
 `;
-
-await client.query(createQuerry, (error, response) => {
-    error ? console.log(error) : console.log("Table is successfully created");
-    client.end;
+  client.query(createQuerry, (error, result) => {
+    done();
+    if (error) {
+      console.log(error);
+    }
+    console.log("Database created successfully");
   });
+});
+
+pool.on("remove", () => {
+  console.log("client removed");
+  process.exit(0);
+});
 
 app.get("/", (request, response) => {
   response.send("Test");

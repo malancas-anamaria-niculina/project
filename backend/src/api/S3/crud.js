@@ -1,47 +1,40 @@
-import {client} from '../../app.js';
+import { pool } from "../../app.js";
 
-
-const addFileInfo = (request, response) => {
-  const { name, size, download_link, uploaded_time } = request.body;
-  console.log(request.body);
-    async() => {
-      await client.connect((err) => {
-        if (err){
-          throw err;
-        }
-        console.log("Connection succesfully done");
-      });
-      console.log(client);
-      client.query('INSERT INTO file (file_name, size, download_link, uploaded_time) VALUES ($1, $2, $3, $4)', [name, size, download_link, uploaded_time], (err, result)=>{
-        if(!err){
-          response.status(201).send(`File information added with ID: ${res.insertId}`);
-        }});
-      client.end;
-    }
-}
+export const addFileInfo = (request, response) => {
+  const { file_name, size, download_link } = request.body;
+  const uploaded_time = new Date();
+  pool.connect((err, client, done) => {
+    const query =
+      "INSERT INTO files(file_name, size, download_link, uploaded_time) VALUES ($1, $2, $3, $4) RETURNING *";
+    const values = [file_name, parseFloat(size), download_link, uploaded_time];
+    client.query(query, values, (error, result) => {
+      done();
+      if (error) {
+        console.log(error);
+      }
+      response
+        .status(200)
+        .send({ status: "Success", data: { result: result.rows[0] } });
+    });
+  });
+};
 
 const getFilesInfo = (request, response) => {
-  async() => {
-    await client.connect((err) => {
-      if (err){
-        throw err;
+  pool.connect((err, client, done) => {
+    const query = "SELECT * FROM files";
+    client.query(query, (error, result) => {
+      done();
+      if (error) {
+        console.log(error);
       }
-      console.log("Connection succesfully done");
+      response
+        .status(200)
+        .send({ status: "Success", data: { result: result.rows } });
     });
-    client.query('SELECT * FROM file')
-      .then(res => {
-          response.status(200).send(res);
-      })
-      .catch(err => {
-        throw err;
-      })
-      .finally(() => {
-        client.end();
-      });
-  }
-}
+  });
+};
 
 export default {
   addFileInfo,
-  getFilesInfo
+  getFilesInfo,
 };
