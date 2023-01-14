@@ -23,9 +23,24 @@ export const addFileInfo = (request, response) => {
   });
 };
 
-const getFilesInfo = (request, response) => {
+export const getFilesInfo = (request, response) => {
   pool.connect((err, client, done) => {
     const query = "SELECT * FROM files";
+    client.query(query, (error, result) => {
+      done();
+      if (error) {
+        console.log(error);
+      }
+      response
+        .status(200)
+        .send({ status: "Success", data: { result: result.rows } });
+    });
+  });
+};
+
+export const getFileInfo = (request, response) => {
+  pool.connect((err, client, done) => {
+    const query = `SELECT * FROM files WHERE download_code='${request.body.download_code}'`;
     client.query(query, (error, result) => {
       done();
       if (error) {
@@ -41,4 +56,5 @@ const getFilesInfo = (request, response) => {
 export default {
   addFileInfo,
   getFilesInfo,
+  getFileInfo
 };

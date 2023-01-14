@@ -5,6 +5,6 @@ import local_router from "./local/index.js";
 const router = Router();
 
 router.use("/s3", s3_router);
-router.use("/local", local_router)
+router.use("/local", local_router);
 
 export default router;
