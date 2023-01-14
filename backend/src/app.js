@@ -32,8 +32,10 @@ pool.connect((err, client, done) => {
 CREATE TABLE IF NOT EXISTS files (
     file_name varchar,
     size float,
-    download_link varchar,
-    uploaded_time timestamp
+    download_code varchar,
+    uploaded_time timestamp,
+    upload_path varchar,
+    storage varchar
 );
 `;
   client.query(createQuerry, (error, result) => {
@@ -41,13 +43,12 @@ CREATE TABLE IF NOT EXISTS files (
     if (error) {
       console.log(error);
     }
-    console.log("Database created successfully");
+    console.log("Table created successfully");
   });
 });
 
 pool.on("remove", () => {
   console.log("client removed");
-  process.exit(0);
 });
 
 app.get("/", (request, response) => {

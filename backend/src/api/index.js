@@ -1,8 +1,10 @@
 import { Router } from "express";
-import router from "./S3/index.js";
+import s3_router from "./S3/index.js";
+import local_router from "./local/index.js";
 
-const rout = Router();
+const router = Router();
 
-rout.use("/s3", router);
+router.use("/s3", s3_router);
+router.use("/local", local_router)
 
-export default rout;
+export default router;

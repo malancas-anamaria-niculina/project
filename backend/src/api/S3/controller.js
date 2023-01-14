@@ -28,6 +28,9 @@ export const putSignedFileUrl = async (request, response, next) => {
     Body: request.body.body,
   });
   const expires = request.body.expiresIn;
+  request.body.upload_path = "none";
+  request.body.storage = "S3";
+  addFileInfo(request, response);
 
   //const response = await client.send(command);
   const signedUrl = await getSignedUrl(client, command, { expires });
