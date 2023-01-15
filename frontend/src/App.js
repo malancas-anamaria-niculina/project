@@ -13,7 +13,7 @@ function App() {
       </header>
       <Routes>
         <Route path="/dashboard" element={<UploadFile />} />
-        <Route path="/test/:downloadCode" render={(props) => <DownloadFile id={props.match.params.downloadCode}/>}/>
+        <Route path="/test/:downloadCode" element={<DownloadFile />}/>
       </Routes>
     </div>
   );

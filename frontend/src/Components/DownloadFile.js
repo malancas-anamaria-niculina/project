@@ -1,17 +1,15 @@
 import { Component } from "react";
+import { useParams } from "react-router";
 
-export default class UploadFile extends Component {
-    constructor(props) {
-        super(props);
-        console.log(props);
-    }
+function DownloadFile() {
+    let { downloadCode } = useParams();
 
-    render() {
         return(
             <div>
               <h2>Download page</h2>
-              <h2>{this.props.id}</h2>
+              <h2>{downloadCode}</h2>
             </div>
           )
-    }
 }
+
+export default DownloadFile;
