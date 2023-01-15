@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import UploadFile from "./Components/UploadFile";
+import DownloadFile from "./Components/DownloadFile";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       </header>
       <Routes>
         <Route path="/dashboard" element={<UploadFile />} />
+        <Route path="/test/:downloadCode" render={(props) => <DownloadFile id={props.match.params.downloadCode}/>}/>
       </Routes>
     </div>
   );

@@ -48,7 +48,7 @@ export const getFileInfo = (request, response) => {
       }
       response
         .status(200)
-        .send({ status: "Success", data: { result: result.rows } });
+        .send({ status: "Success", data: { filename: result.rows[0].file_name, uploadPath: upload_path } });
     });
   });
 };
