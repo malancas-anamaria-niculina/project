@@ -5,6 +5,14 @@ Run commands from: ~PROJECT_PATH~/frontend
 
 `docker run -it -p 3000:3000 react-app`
 
+To change the React app port, you need to change the command from start in package.json:
+
+Windows: 
+`"start": "set PORT=3006 && react-scripts start"`
+
+Linux:
+`"start": "export PORT=3006 react-scripts start"`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
