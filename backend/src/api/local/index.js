@@ -8,6 +8,6 @@ const router = new Router();
 var jsonParser = bodyParser.json();
 
 router.post("/saveFile", jsonParser, saveFile);
-router.post("/downloadFile", jsonParser, getFileInfo);
+router.get("/downloadFile/:download_code", getFileInfo);
 
 export default router;

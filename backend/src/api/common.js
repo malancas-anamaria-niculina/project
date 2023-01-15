@@ -2,7 +2,9 @@ import CryptoJS from 'crypto-js';
 
 const encrypt = (value) => {
     const passphrase = process.env.PASSPHRASE;
-    return CryptoJS.AES.encrypt(value, passphrase).toString();
+    return CryptoJS.AES.encrypt(value, passphrase)
+            .toString()
+            .replace(/\//g, "-");
 };
 
 const decrypt = (value) => {

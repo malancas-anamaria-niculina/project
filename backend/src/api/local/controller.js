@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { addFileInfo, getFileInfo } from '../db.js';
+import { resolve } from 'path';
+import { addFileInfo } from '../db.js';
 
 export const saveFile = (request, response) => {
     const file_path = `D:\\Projects\\project\\saved_files\\${request.body.filename}`;
@@ -12,4 +13,9 @@ export const saveFile = (request, response) => {
     request.body.upload_path = file_path;
     request.body.storage = "local";
     addFileInfo(request, response);
+};
+
+export const donwloadFile = (filePath) => {
+    const data = fs.readFileSync(filePath, 'utf-8')
+    return data;
 };

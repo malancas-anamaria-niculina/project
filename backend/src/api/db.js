@@ -1,5 +1,6 @@
 import { pool } from "../app.js";
 import crypto from './common.js';
+import { donwloadFile } from "./local/controller.js";
 
 export const addFileInfo = (request, response) => {
   const { filename, filesize, upload_path, storage } = request.body;
@@ -38,17 +39,18 @@ export const getFilesInfo = (request, response) => {
   });
 };
 
-export const getFileInfo = (request, response) => {
+export const getFileInfo = async (request, response) => {
   pool.connect((err, client, done) => {
-    const query = `SELECT * FROM files WHERE download_code='${request.body.download_code}'`;
+    const query = `SELECT * FROM files WHERE download_code='${request.params.download_code}'`;
     client.query(query, (error, result) => {
       done();
       if (error) {
         console.log(error);
       }
+      const fileContent = donwloadFile(result.rows[0].upload_path);
       response
         .status(200)
-        .send({ status: "Success", data: { filename: result.rows[0].file_name, uploadPath: upload_path } });
+        .send({ status: "Success", data: { filename: result.rows[0].file_name, downloadPath: result.rows[0].upload_path, fileContent: fileContent } });
     });
   });
 };

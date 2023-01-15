@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button } from "@mui/material";
+import { axiosConf } from "../common";
 
 function UploadFile() {
   const [temporary_file_check, setTemporaryFile] = useState(true);
@@ -9,11 +10,6 @@ function UploadFile() {
 
   const showFile = async (event) => {
     const file = event.target.files[0];
-    const axiosConf = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
     const URL = "http://localhost:8080/api"
     const url = temporary_file_check ? `${URL}/local/saveFile` : `${URL}/s3/putUrl`;
     const fileContent = await file.text();
