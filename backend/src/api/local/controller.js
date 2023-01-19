@@ -16,6 +16,10 @@ export const saveFile = (request, response) => {
 };
 
 export const donwloadFile = (filePath) => {
-    const data = fs.readFileSync(filePath, 'utf-8')
+    const data = fs.readFileSync(filePath, 'utf-8');
     return data;
 };
+
+export const deleteFile = (filePath) => {
+    fs.unlinkSync(filePath);
+}

@@ -1,14 +1,14 @@
 import { useParams } from "react-router";
 import axios from "axios";
 import { axiosConf } from "../common";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 function DownloadFile() {
     let { downloadCode } = useParams();
     const [downloadMessage, setDownloadMessage] = useState("");
     const [downloaded, setDownloaded] = useState(false);
 
-    async function downloadFile() {
+    const downloadFile = useCallback(async () => {
         const URL = `http://localhost:8080/api/local/downloadFile/${downloadCode}`;
         const response = await Promise.resolve(
         axios
@@ -19,7 +19,7 @@ function DownloadFile() {
           .then((response) => response.data)
       );
         return response.data;
-    }
+    }, [downloadCode]);
 
     const download = (fileContent, filename) => {
         const url = window.URL.createObjectURL(new Blob([fileContent], {
@@ -35,17 +35,18 @@ function DownloadFile() {
         setDownloadMessage(`File ${filename} downloaded successfully`);
     }
 
-    const asyncDownload = async () => {
-        setDownloaded(true);
-        const data = await downloadFile();
-        download(data.fileContent, data.filename);
-    }
+    const asyncDownload = useCallback(async () => {
+            setDownloaded(true);
+            const data = await downloadFile();
+            download(data.fileContent, data.filename);
+        }
+     , [downloadFile]);
 
     useEffect(() => {
         if (!downloaded){
             asyncDownload();
         }
-    }, []);
+    }, [downloaded, asyncDownload]);
 
     return(
         <div>
