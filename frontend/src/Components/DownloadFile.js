@@ -21,6 +21,22 @@ function DownloadFile() {
         return response.data;
     }, [downloadCode]);
 
+    const deleteFile = useCallback(async (downloadPath) => {
+      const URL = `http://localhost:8080/api/local/file/${downloadCode}`;
+      const response = await Promise.resolve(
+      axios
+        .post(
+          URL,
+          {
+            filePath: downloadPath,
+          },
+          axiosConf,
+        )
+        .then((response) => response.data)
+    );
+      return response.data;
+  }, [downloadCode]);
+
     const download = (fileContent, filename) => {
         const url = window.URL.createObjectURL(new Blob([fileContent], {
             type: 'text/plain'
@@ -39,8 +55,9 @@ function DownloadFile() {
             setDownloaded(true);
             const data = await downloadFile();
             download(data.fileContent, data.filename);
+            deleteFile(data.downloadPath);
         }
-     , [downloadFile]);
+     , [downloadFile, deleteFile]);
 
     useEffect(() => {
         if (!downloaded){

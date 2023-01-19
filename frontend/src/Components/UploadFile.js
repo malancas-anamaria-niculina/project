@@ -29,7 +29,7 @@ function UploadFile() {
         .then((response) => response.data)
     );
 
-    response.data.download_link = URL + response.data.download_code;
+    response.data.download_link = "http://localhost:3000/downloadFile/" + response.data.code;
     setFileData(response.data);
     setFileUploaded(false);
 

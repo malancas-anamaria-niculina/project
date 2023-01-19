@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { resolve } from 'path';
-import { addFileInfo } from '../db.js';
+import { addFileInfo, deleteFileInfo } from '../db.js';
 
 export const saveFile = (request, response) => {
     const file_path = `D:\\Projects\\project\\saved_files\\${request.body.filename}`;
@@ -20,6 +20,10 @@ export const donwloadFile = (filePath) => {
     return data;
 };
 
-export const deleteFile = (filePath) => {
-    fs.unlinkSync(filePath);
+export const deleteFile = (request, response) => {
+    console.log(request);
+    console.log(request.body);
+    fs.unlinkSync(request.body.filePath);
+
+    deleteFileInfo(request, response);
 }

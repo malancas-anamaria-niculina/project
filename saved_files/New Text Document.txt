@@ -1,0 +1,3 @@
+
+https://www.enterprisedb.com/postgres-tutorials/how-quickly-build-api-using-nodejs-postgresql
+https://blog.logrocket.com/node-js-orms-why-shouldnt-use/#orms-really-necessary

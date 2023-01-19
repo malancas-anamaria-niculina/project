@@ -13,7 +13,7 @@ function App() {
       </header>
       <Routes>
         <Route path="/dashboard" element={<UploadFile />} />
-        <Route path="/test/:downloadCode" element={<DownloadFile />}/>
+        <Route path="/downloadFile/:downloadCode" element={<DownloadFile />}/>
       </Routes>
     </div>
   );

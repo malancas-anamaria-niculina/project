@@ -18,7 +18,7 @@ export const addFileInfo = (request, response) => {
       if (request.body.storage != "S3"){
         response
         .status(200)
-        .send({ status: "Success", data: { filename: filename, upload_time: uploaded_time, download_code: `/${storage}/${download_code}` } });
+        .send({ status: "Success", data: { filename: filename, upload_time: uploaded_time, download_code: `/${storage}/downloadFile/${download_code}`, code: download_code } });
       }
     });
   });
@@ -51,6 +51,21 @@ export const getFileInfo = async (request, response) => {
       response
         .status(200)
         .send({ status: "Success", data: { filename: result.rows[0].file_name, downloadPath: result.rows[0].upload_path, fileContent: fileContent } });
+    });
+  });
+};
+
+export const deleteFileInfo = async (request, response) => {
+  pool.connect((err, client, done) => {
+    const query = `DELETE FROM files WHERE download_code='${request.params.download_code}'`;
+    client.query(query, (error, result) => {
+      done();
+      if (error) {
+        console.log(error);
+      }
+      response
+        .status(200)
+        .send({ status: "Success" });
     });
   });
 };

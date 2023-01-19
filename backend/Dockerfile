@@ -9,6 +9,7 @@ COPY package.json ./
 
 # COPY app files
 COPY . .
+COPY .env ./
 
 # Install dependencies using npm
 RUN npm install
