@@ -9,7 +9,9 @@ function DownloadFile() {
     const [downloaded, setDownloaded] = useState(false);
 
     const downloadFile = useCallback(async () => {
-        const URL = `http://localhost:8080/api/local/downloadFile/${downloadCode}`;
+        let storage = localStorage.getItem("temporary_file_check");
+        console.log(storage);
+        const URL = `http://localhost:8080/api/${storage}/downloadFile/${downloadCode}`;
         const response = await Promise.resolve(
         axios
           .get(
@@ -20,6 +22,19 @@ function DownloadFile() {
       );
         return response.data;
     }, [downloadCode]);
+
+    const downloadS3File = useCallback(async (URL) => {
+      console.log(URL);
+      const response = await Promise.resolve(
+      axios
+        .get(
+          URL,
+          axiosConf
+        )
+        .then((response) => response.data)
+    );
+      return response;
+  }, []);
 
     const deleteFile = useCallback(async (downloadPath) => {
       const URL = `http://localhost:8080/api/local/file/${downloadCode}`;
@@ -54,10 +69,14 @@ function DownloadFile() {
     const asyncDownload = useCallback(async () => {
             setDownloaded(true);
             const data = await downloadFile();
+            const storage = localStorage.getItem("temporary_file_check")
+            data.fileContent = storage === "local" ? data.fileContent : await downloadS3File(data.signedUrl);
             download(data.fileContent, data.filename);
-            deleteFile(data.downloadPath);
+            if (storage === "local"){
+              deleteFile(data.downloadPath);
+            }
         }
-     , [downloadFile, deleteFile]);
+     , [downloadFile, deleteFile, downloadS3File]);
 
     useEffect(() => {
         if (!downloaded){

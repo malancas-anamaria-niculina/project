@@ -10,7 +10,8 @@ var jsonParser = bodyParser.json();
 
 router.post("/test", jsonParser, test1);
 router.post("/putUrl", jsonParser, putSignedFileUrl);
-router.post("/fileInfo", jsonParser, fileOps.addFileInfo);
+router.post("/fileInfo", jsonParser, putSignedFileUrl);
+router.get("/downloadFile/:download_code", getFileInfo);
 router.get("/fileInfo", fileOps.getFilesInfo);
 router.post("/dbtest", jsonParser, getFileInfo);
 

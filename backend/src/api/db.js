@@ -1,9 +1,11 @@
 import { pool } from "../app.js";
 import crypto from './common.js';
 import { donwloadFile } from "./local/controller.js";
+import {getSignedFileUrl} from "./S3/controller.js";
 
 export const addFileInfo = (request, response) => {
-  const { filename, filesize, upload_path, storage } = request.body;
+  const { filename, filesize, upload_path, storage, signedUrl, body } = request.body;
+  console.log(typeof(signedUrl));
   const uploaded_time = new Date();
   const download_code = crypto.encrypt(filename + uploaded_time).slice(10,30);
   pool.connect((err, client, done) => {
@@ -15,11 +17,9 @@ export const addFileInfo = (request, response) => {
       if (error) {
         console.log(error);
       }
-      if (request.body.storage != "S3"){
-        response
+      response
         .status(200)
-        .send({ status: "Success", data: { filename: filename, upload_time: uploaded_time, download_code: `/${storage}/downloadFile/${download_code}`, code: download_code } });
-      }
+        .send({ status: "Success", data: { filename: filename, upload_time: uploaded_time, download_code: `/${storage}/downloadFile/${download_code}`, code: download_code, signedUrl: signedUrl, body: body } });
     });
   });
 };
@@ -47,10 +47,17 @@ export const getFileInfo = async (request, response) => {
       if (error) {
         console.log(error);
       }
-      const fileContent = donwloadFile(result.rows[0].upload_path);
-      response
+      if (result.rows[0].storage == "S3"){
+        request.params.filename = result.rows[0].file_name;
+        request.params.storage = result.rows[0].storage;
+        request.params.expiresIn = 300;
+        getSignedFileUrl(request, response);
+      }else{
+        const fileContent = donwloadFile(result.rows[0].upload_path);
+        response
         .status(200)
         .send({ status: "Success", data: { filename: result.rows[0].file_name, downloadPath: result.rows[0].upload_path, fileContent: fileContent } });
+      }
     });
   });
 };

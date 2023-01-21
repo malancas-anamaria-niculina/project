@@ -22,20 +22,20 @@ function UploadFile() {
             filename: file.name,
             filesize: file.size,
             body: fileContent,
-            expiresIn: 60,
+            expiresIn: 6000,
           },
           axiosConf
         )
         .then((response) => response.data)
     );
-
     response.data.download_link = "http://localhost:3000/downloadFile/" + response.data.code;
+    const body = response.data.body;
     setFileData(response.data);
     setFileUploaded(false);
 
-    if (!temporary_file_check){
+    if (temporary_file_check === "url"){
       axios
-        .put(response.signedUrl, axiosConf)
+        .put(response.data.signedUrl, {body: body} ,axiosConf)
         .then((response) => console.log(response))
         .catch((error) => {
           console.warn(error);
@@ -45,6 +45,7 @@ function UploadFile() {
   };
 
   const handleOnChange = () => {
+    localStorage.setItem('temporary_file_check', temporary_file_check ? "s3": "local");
     setTemporaryFile(!temporary_file_check);
   };
 
