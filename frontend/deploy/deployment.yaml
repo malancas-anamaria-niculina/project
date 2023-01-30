@@ -17,4 +17,4 @@ spec:
         - name: react-app
           image: docker1509/frontendapp-react:latest
           ports:
-            - containerPort: 80
+            - containerPort: 3000
