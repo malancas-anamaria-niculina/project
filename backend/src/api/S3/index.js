@@ -2,7 +2,7 @@ import { putSignedFileUrl, test1 } from "./controller.js";
 import { Router } from "express";
 import bodyParser from "body-parser";
 import fileOps from "../db.js";
-import {getFileInfo} from "../db.js";
+import { getFileInfo } from "../db.js";
 
 const router = new Router();
 

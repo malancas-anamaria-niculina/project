@@ -3,9 +3,9 @@ services:
   node-backend:
     build: .
     ports:
-    - "8080:8080"
+      - "8080:8080"
     volumes:
-    - .:/app
+      - .:/app
     depends_on:
       - db
     env_file: ./.env
@@ -17,7 +17,7 @@ services:
       - DB_PORT=$DB_PORT
       - PASSPHRASE=$PASSPHRASE
   db:
-    image: 'postgres:14.1-alpine'
+    image: "postgres:14.1-alpine"
     restart: always
     env_file: ./.env
     environment:
@@ -25,4 +25,4 @@ services:
       - POSTGRES_PASSWORD=$DB_PASSWORD
       - POSTGRES_DB=$DB_NAME
     ports:
-      - '5432:5432'
+      - "5432:5432"

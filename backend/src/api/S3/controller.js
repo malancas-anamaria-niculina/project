@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { addFileInfo, getFileInfo } from "../db.js";
 import dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
@@ -15,7 +19,7 @@ const config = {
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
   },
-  region: REGION
+  region: REGION,
 };
 
 // Instantiate new S3 client
@@ -26,7 +30,7 @@ export const putSignedFileUrl = async (request, response, next) => {
   const command = new PutObjectCommand({
     Bucket: BUCKET,
     Key: request.body.filename,
-    Body: request.body.body
+    Body: request.body.body,
   });
   const expires = request.body.expiresIn;
   request.body.upload_path = "none";
@@ -51,9 +55,14 @@ export const getSignedFileUrl = async (request, response, next) => {
   const expires = request.params.expiresIn;
 
   const signedUrl = await getSignedUrl(client, command, { expiresIn: expires });
-  response
-        .status(200)
-        .send({ status: "Success", data: { signedUrl: signedUrl, filename: request.params.filename, storage: request.params.storage } });
+  response.status(200).send({
+    status: "Success",
+    data: {
+      signedUrl: signedUrl,
+      filename: request.params.filename,
+      storage: request.params.storage,
+    },
+  });
 };
 
 export const test1 = async (req, response) => {

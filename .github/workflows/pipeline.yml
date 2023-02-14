@@ -29,8 +29,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           cd frontend
-          minikube start
           minikube ssh docker pull docker1509/frontendapp-react:latest
           kubectl apply -f deploy/deployment.yaml
           kubectl apply -f deploy/service.yaml
-          minikube tunnel

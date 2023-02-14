@@ -4,92 +4,98 @@ import { axiosConf } from "../common";
 import { useEffect, useState, useCallback } from "react";
 
 function DownloadFile() {
-    let { downloadCode } = useParams();
-    const [downloadMessage, setDownloadMessage] = useState("");
-    const [downloaded, setDownloaded] = useState(false);
+  let { downloadCode } = useParams();
+  const [downloadMessage, setDownloadMessage] = useState("");
+  const [downloaded, setDownloaded] = useState(false);
 
-    const downloadFile = useCallback(async () => {
-        let storage = localStorage.getItem("temporary_file_check");
-        console.log(storage);
-        const URL = `http://localhost:8080/api/${storage}/downloadFile/${downloadCode}`;
-        const response = await Promise.resolve(
+  const getStorage = useCallback(async () => {
+    const URL = `http://localhost:8080/api/storage/${downloadCode}`;
+    const response = await Promise.resolve(
+      axios.get(URL, axiosConf).then((response) => response.data)
+    );
+    localStorage.setItem("temporary_file_check", response.data.storage);
+    return response.data.storage;
+  }, [downloadCode]);
+
+  const downloadFile = useCallback(async () => {
+    let storage = getStorage(downloadCode);
+    console.log(storage);
+    const URL = `http://localhost:8080/api/${storage}/downloadFile/${downloadCode}`;
+    const response = await Promise.resolve(
+      axios.get(URL, axiosConf).then((response) => response.data)
+    );
+    return response.data;
+  }, [downloadCode, getStorage]);
+
+  const downloadS3File = useCallback(async (URL) => {
+    console.log(URL);
+    const response = await Promise.resolve(
+      axios.get(URL, axiosConf).then((response) => response.data)
+    );
+    return response;
+  }, []);
+
+  const deleteFile = useCallback(
+    async (downloadPath) => {
+      const URL = `http://localhost:8080/api/local/file/${downloadCode}`;
+      const response = await Promise.resolve(
         axios
-          .get(
+          .post(
             URL,
+            {
+              filePath: downloadPath,
+            },
             axiosConf
           )
           .then((response) => response.data)
       );
-        return response.data;
-    }, [downloadCode]);
-
-    const downloadS3File = useCallback(async (URL) => {
-      console.log(URL);
-      const response = await Promise.resolve(
-      axios
-        .get(
-          URL,
-          axiosConf
-        )
-        .then((response) => response.data)
-    );
-      return response;
-  }, []);
-
-    const deleteFile = useCallback(async (downloadPath) => {
-      const URL = `http://localhost:8080/api/local/file/${downloadCode}`;
-      const response = await Promise.resolve(
-      axios
-        .post(
-          URL,
-          {
-            filePath: downloadPath,
-          },
-          axiosConf,
-        )
-        .then((response) => response.data)
-    );
       return response.data;
-  }, [downloadCode]);
+    },
+    [downloadCode]
+  );
 
-    const download = (fileContent, filename) => {
-        const url = window.URL.createObjectURL(new Blob([fileContent], {
-            type: 'text/plain'
-        }));
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        setDownloadMessage(`File ${filename} downloaded successfully`);
+  const download = (fileContent, filename) => {
+    const url = window.URL.createObjectURL(
+      new Blob([fileContent], {
+        type: "text/plain",
+      })
+    );
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    setDownloadMessage(`File ${filename} downloaded successfully`);
+  };
+
+  const asyncDownload = useCallback(async () => {
+    setDownloaded(true);
+    const data = await downloadFile();
+    const storage = localStorage.getItem("temporary_file_check");
+    data.fileContent =
+      storage === "local"
+        ? data.fileContent
+        : await downloadS3File(data.signedUrl);
+    download(data.fileContent, data.filename);
+    if (storage === "local") {
+      deleteFile(data.downloadPath);
     }
+  }, [downloadFile, deleteFile, downloadS3File]);
 
-    const asyncDownload = useCallback(async () => {
-            setDownloaded(true);
-            const data = await downloadFile();
-            const storage = localStorage.getItem("temporary_file_check")
-            data.fileContent = storage === "local" ? data.fileContent : await downloadS3File(data.signedUrl);
-            download(data.fileContent, data.filename);
-            if (storage === "local"){
-              deleteFile(data.downloadPath);
-            }
-        }
-     , [downloadFile, deleteFile, downloadS3File]);
+  useEffect(() => {
+    if (!downloaded) {
+      asyncDownload();
+    }
+  }, [downloaded, asyncDownload]);
 
-    useEffect(() => {
-        if (!downloaded){
-            asyncDownload();
-        }
-    }, [downloaded, asyncDownload]);
-
-    return(
-        <div>
-          <h2>Download page</h2>
-          <h2>{downloadMessage}</h2>
-        </div>
-      )
+  return (
+    <div>
+      <h2>Download page</h2>
+      <h2>{downloadMessage}</h2>
+    </div>
+  );
 }
 
 export default DownloadFile;

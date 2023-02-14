@@ -1,4 +1,5 @@
 # Deploy using Kubernetes
+
 minikube start
 minikube ssh docker pull docker1509/frontendapp-react:latest
 kubectl apply -f deploy/service.yaml

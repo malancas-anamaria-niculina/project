@@ -5,15 +5,13 @@ import DownloadFile from "./Components/DownloadFile";
 
 function App() {
   return (
-    <div className="App" style={{ height: '100vh', width: '100%' }}>
+    <div className="App" style={{ height: "100vh", width: "100%" }}>
       <header>
-        <h1>
-          Project
-        </h1>
+        <h1>Project</h1>
       </header>
       <Routes>
         <Route path="/dashboard" element={<UploadFile />} />
-        <Route path="/downloadFile/:downloadCode" element={<DownloadFile />}/>
+        <Route path="/downloadFile/:downloadCode" element={<DownloadFile />} />
       </Routes>
     </div>
   );

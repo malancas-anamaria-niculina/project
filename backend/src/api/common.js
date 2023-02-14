@@ -1,18 +1,16 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
 const encrypt = (value) => {
-    const passphrase = process.env.PASSPHRASE;
-    return CryptoJS.AES.encrypt(value, passphrase)
-            .toString()
-            .replace(/\//g, "-");
+  const passphrase = process.env.PASSPHRASE;
+  return CryptoJS.AES.encrypt(value, passphrase).toString().replace(/\//g, "-");
 };
 
 const decrypt = (value) => {
-    const passphrase = process.env.PASSPHRASE;
-    return CryptoJS.AES.decrypt(value, passphrase);
-}
+  const passphrase = process.env.PASSPHRASE;
+  return CryptoJS.AES.decrypt(value, passphrase);
+};
 
 export default {
-    encrypt,
-    decrypt,
+  encrypt,
+  decrypt,
 };
