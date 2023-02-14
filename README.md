@@ -1,5 +1,5 @@
 # project
-Application to upload files (stored in Amazon S3 bucket) and download them after with a key (saved in a database).
+Application to upload files in Amazon S3 bucket or on server. After uploading the file, is generated a download link for downloading the files. The informations regarding files are stored in a PostgreSQL database.
 
 ## Create a React app
 npx create-react-app <app_name>
