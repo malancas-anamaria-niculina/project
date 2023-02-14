@@ -1,6 +1,6 @@
 # Start the application using Docker
 
-Run commands from: ~PROJECT_PATH~/frontend
+Run commands from: <PROJECT_PATH>/frontend
 
 `docker build -t react-app .`
 
