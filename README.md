@@ -4,6 +4,7 @@ Application to upload files in Amazon S3 bucket or on server. After uploading th
 Upload page:
 ![image](/images/dashboard.png?raw=true)
 
+
 ## Create a React app
 npx create-react-app <app_name>
 
