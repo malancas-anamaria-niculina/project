@@ -1,6 +1,6 @@
 # Start the application using Docker
 
-Run commands from: ~PROJECT_PATH~/backend
+Run commands from: <PROJECT_PATH>/backend
 
 `docker build -t node-app .`
 
