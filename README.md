@@ -5,10 +5,10 @@ Upload page:
 ![image](/images/upload_file.png?raw=true)
 
 ## Create a React app
-npx create-react-app <app_name>
+`npx create-react-app <app_name>`
 
 ### Start a React app
-npm start
+`npm start`
 
 ### Format files using prettier
-npx prettier --write .
+`npx prettier --write .`
