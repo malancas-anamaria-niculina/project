@@ -1,18 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
+  name: react-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx-example
   rules:
-    - http:
+    - host: uploadfileapp.com
+      http:
         paths:
-          - path: /testpath
+          - path: /dashboard
             pathType: Prefix
             backend:
               service:
-                name: test
+                name: react-app
                 port:
-                  number: 80
+                  number: 3000
